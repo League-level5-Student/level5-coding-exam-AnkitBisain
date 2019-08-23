@@ -1,6 +1,7 @@
 package Coding_Exam_B;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -24,8 +25,35 @@ public class CodingExamB {
 		 *    into one large String. The string will also state the file name and
 		 *    the line number for where each TODO was found. 
 		*/
-		
-		return "";
+		String everything = "File: " + fileName + "\n";
+		try {
+			File f = new File(fileName);
+			BufferedReader br = new BufferedReader(new FileReader(f));
+			int i = 1;
+			String s = br.readLine();
+			while(s != null) {
+				String s2 = s.trim();
+				if(s2.length() >= 7) {
+					if(s2.substring(0, 7).equals("//TODO:")) {
+						everything+= i + ": " + s2 + "\n";
+					}
+				}
+				s = br.readLine();
+				i++;
+			}
+			br.close();
+			
+		}catch(Exception e) {
+			
+		}
+		return everything + "\n";
+	}
+	
+	public static String trim(String s) {
+		if(s.length() > 0 && s.substring(0,1).equals(" ")) {
+			return trim(s.substring(1, s.length()));
+		}
+		return s;
 	}
 	
 	public static void main(String[] args) {
@@ -33,7 +61,15 @@ public class CodingExamB {
 		finalLogString += getLoggingInfo("src/Coding_Exam_B/classes/RayTracedImageViewer.java");
 		finalLogString += getLoggingInfo("src/Coding_Exam_B/classes/RayTracer.java");
 		finalLogString += getLoggingInfo("src/Coding_Exam_B/classes/Vector3.java");
-		
+		try {
+			FileWriter fw = new FileWriter(new File("TODO_Log.txt"));
+			fw.write(finalLogString);
+			fw.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		String s = "         we did it";
+		System.out.println(trim(s));
 		/*
 		 * 2. Write the finalLogString to a file called TODO_Log.txt. The file should match TODO_Log_example.txt. 
 		 */
